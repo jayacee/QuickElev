@@ -48,8 +48,6 @@ std::list<DWORD> FindUnprotectedNTSystemProcesses() {
 		bool is_system = IsRunningAsNTSystem(proc_entry.th32ProcessID);
 		if (is_system) {
 			processes.push_back(proc_entry.th32ProcessID);
-			// pid = proc_entry.th32ProcessID;
-			// break;
 		}
 	} while (Process32Next(toolhelp_snapshot, &proc_entry));
 	CloseHandle(toolhelp_snapshot);
