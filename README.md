@@ -13,3 +13,6 @@ These were the tested protection levels, based on the protection levels that did
 - ❌ PsProtectedSignerWindows-Light
 
 Surprisingly, ```PsProtectedSignerWindows-Light``` does not protect its token enough to prevent this. By opening processes of this protection level with the ```PROCESS_QUERY_LIMITED_INFORMATION``` privilege, its token can then be opened with ```TOKEN_QUERY | TOKEN_DUPLICATE``` privileges.
+
+## Download
+[Releases](releases/)
