@@ -38,7 +38,7 @@ bool IsRunningAsNTSystem(DWORD pid) {
 
 std::list<DWORD> FindUnprotectedNTSystemProcesses() {
 	std::list<DWORD> processes = {};
-	// Finds a process running as "NT AUTHORITY\SYSTEM"
+	// Finds processes running as "NT AUTHORITY\SYSTEM"
 	PROCESSENTRY32W proc_entry = {};
 	DWORD pid = 0;
 	proc_entry.dwSize = sizeof(PROCESSENTRY32W);
