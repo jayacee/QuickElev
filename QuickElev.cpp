@@ -8,8 +8,6 @@
 
 bool IsRunningAsNTSystem(DWORD pid) {
 	HANDLE token = {};
-	// Although we would call OpenProcess with TOKEN_QUERY anyway, this also functions as a test to see if it is protected
-	// This is because Windows process protection doesn't normally allow access to protected processes with this privilege unless the accessing process also has process protection
 	HANDLE process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,false,pid);
 	if (!OpenProcessToken(process, TOKEN_QUERY, &token)) {
 		CloseHandle(process);
@@ -38,7 +36,7 @@ bool IsRunningAsNTSystem(DWORD pid) {
 
 std::list<DWORD> FindUnprotectedNTSystemProcesses() {
 	std::list<DWORD> processes = {};
-	// Finds processes running as "NT AUTHORITY\SYSTEM"
+	// Finds a process running as "NT AUTHORITY\SYSTEM"
 	PROCESSENTRY32W proc_entry = {};
 	DWORD pid = 0;
 	proc_entry.dwSize = sizeof(PROCESSENTRY32W);
@@ -157,7 +155,6 @@ bool start_process(HANDLE token, LPVOID* env_block) {
 		&si, //  Startup info
 		&pi) != 0; // Process information info
 	std::cout << "Error code after : " << GetLastError() << std::endl;
-	DestroyEnvironmentBlock(*env_block);
 	return success;
 }
 
@@ -205,6 +202,7 @@ bool ElevateToNTSystem() {
 		if (success) break;
 		RevertToSelf(); // Resets the token to our one with SeDebugPrivilege since our copied token might not have it
 	}
+	DestroyEnvironmentBlock(*curr_env_block);
 	return true;
 }
 int main() {
